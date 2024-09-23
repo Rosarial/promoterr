@@ -1,0 +1,104 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-button (click)="navigateToHome()">Voltar</ion-button>
+    </ion-buttons>
+    <ion-title>Perfil</ion-title>
+    <ion-buttons slot="end">
+      <ion-button (click)="toggleEditMode()">{{ editMode ? 'Cancelar' : 'Editar' }}</ion-button>
+      <ion-button *ngIf="editMode" (click)="saveProfile()">Salvar</ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <div class="box_photo_profile">
+    <div class="box_photo_profile__content">
+      <div class="box_photo_profile__content__img">
+        <ion-img [src]="imageProfile.img"></ion-img>
+        <!-- <div class="box_photo_profile__content__img__icon" *ngIf="editMode">
+          <ion-button fill="clear" (click)="takePhoto()">
+            <ion-icon slot="icon-only" name="camera"></ion-icon>
+          </ion-button>
+        </div> -->
+      </div>
+    </div>
+  </div>
+
+  <form [formGroup]="profileForm">
+    <ion-card>
+      <ion-item>
+        <ion-label position="stacked">Nome</ion-label>
+        <ion-input formControlName="firstName" [readonly]="!editMode"></ion-input>
+      </ion-item>
+      <ion-item>
+        <ion-label position="stacked">Sobrenome</ion-label>
+        <ion-input formControlName="lastName" [readonly]="!editMode"></ion-input>
+      </ion-item>
+      <ion-item>
+        <ion-label position="stacked">Endereço</ion-label>
+        <ion-input formControlName="address" [readonly]="!editMode"></ion-input>
+      </ion-item>
+      <ion-item>
+        <ion-label position="stacked">Email</ion-label>
+        <ion-input formControlName="email" [readonly]="!editMode"></ion-input>
+      </ion-item>
+      <ion-item>
+        <ion-label position="stacked">Telefone</ion-label>
+        <ion-input formControlName="phone" [readonly]="!editMode"></ion-input>
+      </ion-item>
+      <ion-item>
+        <ion-label position="stacked">Dispositivo</ion-label>
+        <div *ngIf="profileForm.get('deviceInfo')?.value">
+          <p>Modelo: {{ profileForm.get('deviceInfo')?.value.info?.model }}</p>
+          <p>Plataforma: {{ profileForm.get('deviceInfo')?.value.info?.platform }}</p>
+          <p>
+            Sistema Operacional: {{ profileForm.get('deviceInfo')?.value.info?.operatingSystem }}
+          </p>
+          <p>Versão SO: {{ profileForm.get('deviceInfo')?.value.info?.osVersion }}</p>
+          <p>Fabricante: {{ profileForm.get('deviceInfo')?.value.info?.manufacturer }}</p>
+          <p>Virtual: {{ profileForm.get('deviceInfo')?.value.info?.isVirtual ? 'Sim' : 'Não' }}</p>
+          <p>Versão WebView: {{ profileForm.get('deviceInfo')?.value.info?.webViewVersion }}</p>
+          <p>
+            Nível de Bateria: {{ profileForm.get('deviceInfo')?.value.infoBattery?.batteryLevel }}%
+          </p>
+          <p>
+            Carregando: {{ profileForm.get('deviceInfo')?.value.infoBattery?.isCharging ? 'Sim' :
+            'Não' }}
+          </p>
+          <p>UUID: {{ profileForm.get('deviceInfo')?.value.uuID?.identifier }}</p>
+        </div>
+      </ion-item>
+      <ion-item>
+        <ion-label position="stacked">Último Login</ion-label>
+        <ion-input formControlName="lastLogin" readonly></ion-input>
+      </ion-item>
+      <ion-item>
+        <ion-label position="stacked">Criado Em</ion-label>
+        <ion-input formControlName="createdAt" readonly></ion-input>
+      </ion-item>
+      <ion-item>
+        <ion-label position="stacked">Atualizado Em</ion-label>
+        <ion-input formControlName="updatedAt" readonly></ion-input>
+      </ion-item>
+      <ion-item>
+        <ion-label position="stacked">Função</ion-label>
+        <ion-select
+          formControlName="role"
+          [disabled]="!editMode || profileForm.get('role')?.value !== 'ADMIN'"
+        >
+          <ion-select-option value="PROMOTER">Promotor</ion-select-option>
+          <ion-select-option value="SUPERVISOR">Supervisor</ion-select-option>
+          <ion-select-option value="ADMIN">Admin</ion-select-option>
+        </ion-select>
+      </ion-item>
+      <ion-item>
+        <ion-label position="stacked">Posição Atual</ion-label>
+        <div *ngIf="profileForm.get('currentPosition')?.value">
+          <p>Latitude: {{ profileForm.get('currentPosition')?.value.lat }}</p>
+          <p>Longitude: {{ profileForm.get('currentPosition')?.value.lng }}</p>
+        </div>
+      </ion-item>
+    </ion-card>
+  </form>
+</ion-content>

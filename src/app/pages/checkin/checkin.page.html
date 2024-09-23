@@ -1,0 +1,360 @@
+<ng-container *ngIf="store && store?.active && !store?.checkin?.isDone">
+  <app-header-custom
+    [enableMenu]="false"
+    [onBack]="true"
+    [title]="'Iniciar Check-in - '
+   + store.name"
+  />
+
+  <ion-content class="ion-padding">
+    <ion-card class="custom-card">
+      <ion-chip color="success" mode="ios" outline="true" *ngIf="store.checkin?.initialCheckinDate">
+        <ion-label>
+          Check-in Realizado em: {{ store.checkin?.initialCheckinDate | date: 'dd/MM/yyyy HH:mm'}}
+        </ion-label>
+        <ion-icon name="close-circle"></ion-icon>
+      </ion-chip>
+    </ion-card>
+
+    <ng-container *ngIf="loadingCheckingLocationFinish">
+      <div class="checkin-card">
+        <ion-card class="ion-no-margin" mode="ios" [disabled]="errorCoords">
+          <ion-grid>
+            <ion-row>
+              <ion-col size="2" class="content_stores__thumbnail">
+                <ion-thumbnail>
+                  <img class="content_stores__img" *ngIf="store && store.foto" [src]="store.id" />
+                  <!--<ion-icon name="storefront"></ion-icon>  -->
+                  <ion-icon
+                    class="content_stores__icon"
+                    color="primary"
+                    *ngIf="store && !store.foto"
+                    name="storefront"
+                  ></ion-icon>
+                </ion-thumbnail>
+              </ion-col>
+              <ion-col size="10">
+                <ion-text class="ion-text-upercase content_stores__text">
+                  <div class="content_stores__text_name">
+                    <strong>{{store.cnpj}} - {{store.name}}</strong>
+                  </div>
+                  <div class="content_stores__text_date">
+                    <!-- 21/05/2024 {{store.open}} - {{store.close}}
+                    <span>{{store.telefone}}</span> -->
+                  </div>
+                  <div class="content_stores__text_addres">{{store.address}}</div>
+                </ion-text>
+              </ion-col>
+            </ion-row>
+          </ion-grid>
+        </ion-card>
+      </div>
+
+      <div class="title" *ngIf="!errorCoords && !outOfAllowedArea">
+        <ion-text color="secondary">
+          <h1
+            *ngIf="store?.checkin?.initialCheckinDate ? 'Iniciar Checkout': 'Iniciar Check-in'"
+          ></h1>
+        </ion-text>
+      </div>
+
+      <!-- Distância -->
+      <ion-card class="custom-card" *ngIf="distanceInKilometers">
+        <ion-list lines="none">
+          <ion-item [button]="false">
+            <ion-icon color="tertiary" slot="start" name="analytics"></ion-icon>
+            <ion-label>Distância</ion-label>
+            <ion-note slot="end"> {{distanceInKilometers}} </ion-note>
+          </ion-item>
+        </ion-list>
+      </ion-card>
+      <!-- Escolher foto incial -->
+      <ion-card
+        class="custom-card"
+        *ngIf="!errorCoords && !outOfAllowedArea && !store?.checkin?.initialCheckinDate"
+      >
+        <ion-list lines="none" class="ion-no-padding ion-no-margin">
+          <ion-item [button]="true" (click)="takeBeforePhoto()" *ngIf="!imageCheckin">
+            <ion-icon color="tertiary" slot="start" name="camera"></ion-icon>
+            <ion-label>Tirar foto</ion-label>
+          </ion-item>
+        </ion-list>
+
+        <ion-list lines="none" class="ion-no-padding ion-no-margin">
+          <ion-item [button]="true" (click)="deleteImage()" *ngIf="imageCheckin">
+            <ion-icon color="danger" slot="start" name="trash"></ion-icon>
+            <ion-label>Excluir, escolher tirar foto</ion-label>
+          </ion-item>
+        </ion-list>
+
+        <div class="photo" *ngIf="imageCheckin">
+          <ion-img [src]="imageCheckin.base64Data"></ion-img>
+        </div>
+      </ion-card>
+
+      <ion-card
+        class="custom-card"
+        *ngIf="!errorCoords && !outOfAllowedArea && store?.checkin?.initialCheckinDate"
+      >
+        <ion-text
+          class="ion-padding-horizontal ion-text-center"
+          color="primary"
+          *ngIf="store.checkin?.photoUrls[0]?.img"
+        >
+          <p>{{'Foto gondula'}}</p>
+        </ion-text>
+        <ion-img [src]="store.checkin?.photoUrls[0]?.img"></ion-img>
+      </ion-card>
+      <!-- Marcar check-in -->
+      <ion-card
+        [disabled]="store.checkin?.initialCheckinDate"
+        class="custom-card"
+        *ngIf="!errorCoords && !outOfAllowedArea && !store?.checkin?.initialCheckinDate"
+      >
+        <ion-list>
+          <ion-item lines="none" [button]="false">
+            <ion-icon name="checkmark-done-circle" color="tertiary" slot="start"></ion-icon>
+            <ion-checkbox
+              (ionChange)="onChangeCheckBoxInitialCheckin($event)"
+              justify="space-between"
+              [checked]="checkedInitialCheckin"
+            >
+              check-in?
+            </ion-checkbox>
+          </ion-item>
+        </ion-list>
+      </ion-card>
+
+      <!-- Avisos -->
+
+      <!-- Erro Há um problema com a sua
+                    localização-->
+      <div
+        class="erro-coords"
+        *ngIf="(errorCoords || outOfAllowedArea) && store?.checkin?.initialCheckinDate"
+      >
+        <ion-card class="custom-card" [color]="errorCoords ? 'danger' : 'warning'">
+          <ion-grid fixed>
+            <ion-row>
+              <ion-col size="2">
+                <div class="icon">
+                  <img src="./assets/icon/smartphone.gif" alt="" />
+                </div>
+              </ion-col>
+              <ion-col size="10">
+                <!-- [color]="errorCoords ? 'light' : 'dark' -->
+                <ion-text [color]="errorCoords ? 'light' : 'dark'">
+                  <h6 *ngIf="errorCoords">
+                    Não é possível fazer o check-in neste momento. Há um problema com a sua
+                    localização. Verifique e tente novamente!
+                  </h6>
+
+                  <h6 *ngIf="outOfAllowedArea">
+                    Você não está na área permitida para fazer o check-in nesta empresa/store.
+                    Verifique sua localização e tente novamente!
+                  </h6>
+                </ion-text>
+              </ion-col>
+            </ion-row>
+          </ion-grid>
+        </ion-card>
+      </div>
+
+      <!-- Não fez o checkout
+      <div class="not-checkin ion-padding-vertical" *ngIf="!errorCoords && !outOfAllowedArea">
+        <div class="icon">
+          <ion-icon color="warning" slot="start" name="warning"></ion-icon>
+        </div>
+        <div class="text">
+          <ion-text color="medium">
+            <h1>Você ainda não fez o checkout!</h1>
+            <p>Para iniciar o checkout, toque no botão vermelho abaixo!</p>
+          </ion-text>
+        </div>
+      </div>-->
+
+      <!-- Botões -->
+
+      <ng-container *ngIf="!store?.checkin?.initialCheckinDate && finishedCheckinInitialSendRemote">
+      </ng-container>
+
+      <ion-card
+        class="custom-card btns"
+        button="true"
+        *ngIf="!finishedCheckinInitialSendRemote && !store.checkin?.initialCheckinDate"
+      >
+        <ion-button
+          [disabled]="!imageCheckin?.base64Data ||(store && store.checkin?.initialCheckinDate)"
+          expand="full"
+          shape="round"
+          (click)="onSubmit()"
+        >
+          <ion-icon slot="start" name="cloud-upload"></ion-icon>
+          Salvar
+        </ion-button>
+      </ion-card>
+      <ion-button
+        *ngIf="store && store.checkin?.initialCheckinDate"
+        expand="full"
+        shape="round"
+        (click)="checkoutAdd()"
+        class="stockButton"
+      >
+        <ion-icon slot="start" name="archive-outline"></ion-icon>
+        Gerenciar Estoque
+      </ion-button>
+      <ion-card
+        class="custom-card btns"
+        button="true"
+        *ngIf="finishedCheckinInitialSendRemote ||
+        store?.checkin?.initialCheckinDate && !errorCoords"
+      >
+        <ion-button expand="full" shape="round" (click)="checkoutAdd()">
+          <ion-icon slot="start" name="exit"></ion-icon>
+          Fazer Checkout
+        </ion-button>
+      </ion-card>
+    </ng-container>
+  </ion-content>
+</ng-container>
+
+<!-- Detalhes Checkout -->
+<ng-container *ngIf="store && store.checkin?.initialCheckinDate && store.checkin?.isDone">
+  <app-header-custom
+    [enableMenu]="false"
+    [onBack]="true"
+    [title]="'Detalhes do Check-in - '
+ + store.name"
+  />
+  <ion-content class="ion-padding">
+    <div class="checkin-card">
+      <ion-card class="ion-no-margin" mode="ios" [disabled]="errorCoords">
+        <ion-grid>
+          <ion-row>
+            <ion-col size="2" class="content_stores__thumbnail">
+              <ion-thumbnail>
+                <img class="content_stores__img" *ngIf="store && store.foto" [src]="store.id" />
+                <!--<ion-icon name="storefront"></ion-icon>  -->
+                <ion-icon
+                  class="content_stores__icon"
+                  color="primary"
+                  *ngIf="store && !store.foto"
+                  name="storefront"
+                ></ion-icon>
+              </ion-thumbnail>
+            </ion-col>
+            <ion-col size="10">
+              <ion-text class="ion-text-upercase content_stores__text">
+                <div class="content_stores__text_name">
+                  <strong>{{store.cnpj}} - {{store.name}}</strong>
+                </div>
+                <div class="content_stores__text_date">
+                  <!-- 21/05/2024 {{store.open}} - {{store.close}}
+                  <span>{{store.telefone}}</span> -->
+                </div>
+                <div class="content_stores__text_addres">{{store.address}}</div>
+              </ion-text>
+            </ion-col>
+          </ion-row>
+        </ion-grid>
+      </ion-card>
+    </div>
+    <!-- Fotos gondulas -->
+    <ion-grid fixed>
+      <ion-row>
+        <ion-col size="6" *ngFor="let photo of store.checkin?.photoUrls; let i = index">
+          <ion-card
+            class="custom-card"
+            button="true"
+            (click)="openPreviewImage(
+            {
+              img: photo?.img,
+              title: photo?.type,
+              description: 'Imagem da gondola ' +  photo?.type
+            }
+          )"
+          >
+            <ion-card-header>
+              <ion-card-subtitle>{{photo.type}}</ion-card-subtitle>
+              <ion-card-title>Gandola </ion-card-title>
+            </ion-card-header>
+            <ion-card-content>
+              <ion-img *ngIf="photo?.img" [src]="photo?.img"></ion-img>
+            </ion-card-content>
+          </ion-card>
+        </ion-col>
+      </ion-row>
+    </ion-grid>
+
+    <ion-card class="custom-card ion-padding-horizontal">
+      <ion-text color="primary">
+        <h1>Informações:</h1>
+      </ion-text>
+      <p>{{ store.checkin?.initialCheckinDate | date: 'dd/MM/yyyy HH:mm'}}</p>
+
+      <div *ngIf="storeCheckoutDetails?.id">
+        <ion-item-divider>
+          <ion-label>Produtos</ion-label>
+        </ion-item-divider>
+
+        <ng-container *ngIf="storeCheckoutDetails?.needRestock">
+          <ion-list>
+            <ion-list-header>
+              <ion-label color="warning">Estoque baixo:</ion-label>
+              <ion-button>{{storeCheckoutDetails.restockProducts?.length}}</ion-button>
+            </ion-list-header>
+
+            <ion-item *ngFor="let p of storeCheckoutDetails?.restockProducts">
+              @if(p?.product?.name && p?.quantity){
+              <ion-label> {{ p.product.name }} </ion-label>
+              <ion-chip slot="end" color="tertiary" mode="ios" outline="true">
+                <ion-label>Qtd:{{ p.quantity }}</ion-label>
+              </ion-chip>
+              }
+            </ion-item>
+          </ion-list>
+        </ng-container>
+
+        <ng-container *ngIf="storeCheckoutDetails?.hasDamage">
+          <ion-list>
+            <ion-list-header>
+              <ion-label color="danger">Com Avarias:</ion-label>
+              <ion-button>{{storeCheckoutDetails.damageProducts?.length}}</ion-button>
+            </ion-list-header>
+
+            <ion-item *ngFor="let dmgP of storeCheckoutDetails?.damageProducts">
+              <ion-thumbnail class="cursor-pointer">
+                <ion-img
+                  (click)=" openPreviewImage(
+                    {
+                      img: dmgP.damagePhoto.url ?? '',
+                      title: dmgP?.product?.name ?? '',
+                      description: dmgP?.damageDescription ?? ''
+                    })"
+                  [src]="dmgP.damagePhoto.url"
+                ></ion-img>
+              </ion-thumbnail>
+              <ion-label class="ion-padding">
+                <p>{{ dmgP?.product?.name }}</p>
+                <strong>Descrição: </strong>
+                <span style="color: black">{{ dmgP?.damageDescription }}</span>
+              </ion-label>
+            </ion-item>
+          </ion-list>
+        </ng-container>
+      </div>
+    </ion-card>
+  </ion-content>
+</ng-container>
+
+<ion-content *ngIf="!store" (click)="onBackButton(true)">
+  <div class="center">
+    <img src="./assets/icon/smartphone.gif" alt="" />
+  </div>
+</ion-content>
+<!--
+ <ion-fab vertical="bottom" horizontal="end" slot="fixed">
+      <ion-fab-button [disabled]="disableButtonAddCheckin" (click)="addCheckin()">
+        <ion-icon name="add"></ion-icon>
+      </ion-fab-button>
+    </ion-fab> -->

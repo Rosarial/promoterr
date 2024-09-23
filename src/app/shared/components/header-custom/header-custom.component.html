@@ -1,0 +1,22 @@
+<ion-header class="ion-no-border">
+  <ion-toolbar color="primary" class="headerBar">
+    <ion-buttons slot="start" *ngIf="onBack">
+      <ion-back-button [defaultHref]="routerDefault" text=""></ion-back-button>
+    </ion-buttons>
+
+    <ion-buttons slot="start" *ngIf="enableMenu">
+      <ion-menu-button></ion-menu-button>
+    </ion-buttons>
+    <ion-title>{{ title }}</ion-title>
+  </ion-toolbar>
+</ion-header>
+<ng-content></ng-content>
+
+<!-- <ion-header [translucent]="true">
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-menu-button></ion-menu-button>
+    </ion-buttons>
+    <ion-title>{{ folder }}</ion-title>
+  </ion-toolbar>
+</ion-header> -->

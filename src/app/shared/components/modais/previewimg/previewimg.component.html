@@ -1,0 +1,17 @@
+<ion-header color="primary">
+  <ion-toolbar>
+    <ion-buttons slot="start" (click)="close()">
+      <ion-icon name="close-circle"></ion-icon>
+    </ion-buttons>
+    <ion-title class="ion-text-upercase">{{ props.title ? props.title : '' }}</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <div class="previwimg" *ngIf="props?.img">
+    <ion-img [src]="props.img"></ion-img>
+  </div>
+  <div class="desc" *ngIf="props?.description">
+    <p>{{ props.description ? props.description : '' }}</p>
+  </div>
+</ion-content>

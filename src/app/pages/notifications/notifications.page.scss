@@ -1,0 +1,132 @@
+.content_notifications {
+  ion-card {
+    margin: 1em;
+    padding: 1em 0.5em;
+    border-radius: 08px;
+  }
+
+  &__thumbnail {
+    position: relative;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+
+  &__icon {
+    font-size: 3em;
+    max-height: 50px;
+  }
+  &__text {
+    display: flex;
+    flex-direction: column;
+    &_name {
+      padding-bottom: 0.5em;
+      text-transform: uppercase;
+    }
+    &_date {
+      padding-bottom: 0.3em;
+      justify-self: self-end;
+    }
+    &_message {
+      font-size: medium;
+    }
+  }
+}
+
+.timeSection {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: flex-end;
+}
+
+.conversationContainer {
+  height: calc(100vh - 100px);
+  display: flex;
+  flex-direction: column;
+  .messagesContainer {
+    flex: 1;
+  }
+}
+
+.pictureCol {
+  padding: 0;
+}
+.profilePicture {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100%;
+}
+.profilePicture > * {
+  width: 100%;
+  height: 100%;
+}
+.chatHeader {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding-top: 12px;
+}
+.backButton {
+  display: flex;
+  align-items: center;
+  width: 30px;
+  height: 30px;
+}
+.backButton > * {
+  width: 100%;
+  height: 100%;
+}
+.userName {
+  flex: 1;
+  text-align: center;
+}
+.messagesContainer {
+  display: flex;
+  flex-direction: column;
+  overflow-y: scroll;
+  max-height: 90%;
+  box-sizing: border-box;
+}
+.message {
+  display: flex;
+  gap: 6px;
+  margin-bottom: 20%;
+  .text {
+    flex: 1;
+  }
+  .date {
+    font-size: 10px;
+    justify-self: flex-end;
+  }
+}
+.ownMessage {
+  background-color: var(--e-global-color-21a02e1);
+  margin: 1em 1em 1em 25% !important;
+}
+.footer {
+  position: absolute;
+  bottom: 0;
+  width: 100%;
+  background-color: var(--e-global-color-a14b129);
+  display: flex;
+  align-items: center;
+  form {
+    flex: 1;
+  }
+  button {
+    background-color: var(--ion-color-dark);
+    aspect-ratio: 1 !important;
+    margin-right: 14px;
+    border-radius: 50%;
+    ion-icon {
+      font-size: 24px;
+      color: white;
+    }
+  }
+  :not(:first-child) {
+    width: 5%;
+  }
+}

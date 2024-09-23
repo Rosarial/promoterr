@@ -1,0 +1,10 @@
+<div class="buttons">
+  <button
+    *ngFor="let button of buttons"
+    (click)="buttonClicked(button)"
+    [class.operator]="isOperator(button)"
+    [class.clear]="button === 'C'"
+  >
+    {{ button }}
+  </button>
+</div>

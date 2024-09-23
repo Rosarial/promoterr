@@ -1,0 +1,71 @@
+<ion-content [fullscreen]="true" class="login-page ion-padding">
+  <div class="login-page__content">
+    <div class="login-page__content__logo">
+      <app-logo></app-logo>
+    </div>
+
+    <form class="login-page__content__form" [formGroup]="loginForm" (ngSubmit)="onSubmit()">
+      <ion-grid fixed>
+        <ion-row>
+          <ion-col size="12">
+            <ion-list lines="none" class="ion-no-padding">
+              <ion-item>
+                <ion-input
+                  class="custom"
+                  labelPlacement="stacked"
+                  formControlName="email"
+                  inputmode="email"
+                  type="email"
+                  placeholder="email@domain.com"
+                >
+                  <ion-icon slot="start" color="primary" name="mail" aria-hidden="true"> </ion-icon>
+                </ion-input>
+              </ion-item>
+
+              <ion-item>
+                <ion-input
+                  style="position: relative"
+                  class="custom"
+                  inputmode="password"
+                  [type]="hidePwd ? 'password' : 'text'"
+                  labelPlacement="stacked"
+                  formControlName="password"
+                  minlength="6"
+                  placeholder="Sua senha"
+                  ><ion-icon
+                    color="primary"
+                    slot="start"
+                    name="lock-closed"
+                    aria-hidden="true"
+                  ></ion-icon>
+                </ion-input>
+                <div class="icon-eye" style="position: absolute; right: 2em; z-index: 100">
+                  <ion-icon
+                    (click)="showPasswordInput()"
+                    slot="end"
+                    color="primary"
+                    name="eye"
+                    aria-hidden="true"
+                  ></ion-icon>
+                </div>
+              </ion-item>
+            </ion-list>
+          </ion-col>
+
+          <ion-col sizeMd="12">
+            <ion-button
+              color="primary"
+              expand="full"
+              shape="round"
+              type="submit"
+              [disabled]="loginForm.invalid"
+            >
+              Entrar
+            </ion-button>
+          </ion-col>
+        </ion-row>
+      </ion-grid>
+    </form>
+  </div>
+ 
+</ion-content>

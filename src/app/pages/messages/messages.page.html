@@ -1,0 +1,118 @@
+<app-header-custom title="Mensagens"> </app-header-custom>
+
+<ion-content [fullscreen]="true">
+  <ng-container>
+    <div class="content chatsContainer">
+      <div class="content_chats">
+        <div class="center" *ngIf="loading">
+          <ion-spinner name="crescent"></ion-spinner>
+        </div>
+        @if(selectedReceiverChat){ {{scrollToBottom()}}
+        <div class="chatHeader">
+          <button (click)="deselectChat()" class="backButton">
+            <ion-icon name="chevron-back-outline"></ion-icon>
+          </button>
+          <div class="userName">
+            <strong>
+              {{selectedReceiverChat.firstName && selectedReceiverChat.lastName ?
+              selectedReceiverChat.firstName + ' ' + selectedReceiverChat.lastName :
+              selectedReceiverChat.userName}}
+            </strong>
+          </div>
+        </div>
+        <div class="conversationContainer">
+          <div class="messagesContainer">
+            <div mode="ios" *ngFor="let message of messages">
+              @if(message.senderId !== selectedReceiverChat.id){
+              <ion-card class="message ownMessage">
+                <span class="text">{{message.message}}</span>
+                <div class="timeSection">
+                  <span class="date">{{formatDateMessage(message.createdAt)}}</span>
+                  <span class="date">{{formatHourMessage(message.createdAt)}}</span>
+                </div>
+              </ion-card>
+              }@else{
+              <ion-card class="message">
+                <span class="text">{{message.message}}</span>
+                <div class="timeSection">
+                  <span class="date">{{formatDateMessage(message.createdAt)}}</span>
+                  <span class="date">{{formatHourMessage(message.createdAt)}}</span>
+                </div>
+              </ion-card>
+              }
+            </div>
+          </div>
+          <div class="footer">
+            <form [formGroup]="profileForm">
+              <ion-card>
+                <ion-item>
+                  <ion-input
+                    (keydown.enter)="enviarMensagem()"
+                    formControlName="messageText"
+                  ></ion-input> </ion-item
+              ></ion-card>
+            </form>
+            @if(sending){
+            <ion-spinner name="crescent"></ion-spinner>
+            }@else{
+            <button (click)="handleClickSendButton()">
+              <ion-icon name="chevron-forward-outline"></ion-icon>
+            </button>
+            }
+          </div>
+        </div>
+        }@else{
+
+        <ng-container *ngIf="!loading">
+          <ion-card
+            mode="ios"
+            button
+            *ngFor="let chat of chats"
+            (click)="selectChat(chat.receiver)"
+          >
+            <ion-grid>
+              <ion-row>
+                <ion-col size="2" class="pictureCol">
+                  <div class="profilePicture">
+                    <ion-icon
+                      class="content_chats__icon"
+                      color="primary"
+                      name="person-circle"
+                    ></ion-icon>
+                  </div>
+                </ion-col>
+                <ion-col size="8">
+                  <ion-text class="ion-text-upercase content_chats__text">
+                    <div class="content_chats__text_name">
+                      <strong
+                        >{{chat.receiver.firstName && chat.receiver.lastName ?
+                        chat.receiver.firstName + ' ' + chat.receiver.lastName :
+                        chat.receiver.userName}}</strong
+                      >
+                    </div>
+                    <div class="content_chats__text_message">
+                      @if(chat?.lastMessage){
+                      <span> {{chat.lastMessage?.message}} </span>
+                      } @else {
+                      <span>Iniciar nova conversa</span>
+                      }
+                    </div>
+                  </ion-text>
+                </ion-col>
+                <ion-col size="2" class="timeSection">
+                  <div *ngIf="chat?.lastMessage" class="content_chats__text_date">
+                    {{formatDateMessage(chat.lastMessage?.createdAt ?? '')}}
+                  </div>
+                  <div *ngIf="chat?.lastMessage" class="content_chats__text_date">
+                    {{formatHourMessage(chat.lastMessage?.createdAt ?? '')}}
+                  </div>
+                </ion-col>
+              </ion-row>
+            </ion-grid>
+          </ion-card>
+        </ng-container>
+        }
+      </div>
+    </div>
+  </ng-container>
+</ion-content>

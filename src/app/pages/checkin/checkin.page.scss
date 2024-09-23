@@ -1,0 +1,77 @@
+.content_stores {
+  ion-card {
+    margin: 1em;
+    padding: 1em 0.5em;
+    border-radius: 08px;
+  }
+
+  &__thumbnail {
+    position: relative;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+
+  &__img {
+  }
+
+  &__icon {
+    font-size: 3em;
+  }
+  &__text {
+    &_name {
+      padding-bottom: 0.5em;
+      text-transform: uppercase;
+    }
+    &_date {
+      padding-bottom: 0.3em;
+    }
+    &_address {
+      font-size: medium;
+    }
+  }
+}
+.erro-coords {
+  .icon {
+    position: relative;
+    height: 100%;
+    display: flex;
+    align-items: center;
+  }
+  img {
+    overflow: hidden;
+    width: 50px;
+    border-radius: 50%;
+  }
+}
+.not-checkin {
+  display: flex;
+  align-items: center;
+  .icon {
+    font-size: 3em;
+    padding: 0 0.5em 0 0;
+  }
+  .text {
+  }
+}
+.custom-card {
+  margin: 1em 0;
+}
+.center {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  background: white;
+  justify-content: center;
+  align-items: center;
+}
+.btns {
+  background-color: rgba(255, 255, 255, 0.46);
+}
+.stockButton > button.button-native {
+  .button-native {
+    background: var(--ion-color-danger-tint) !important;
+  }
+
+  background: var(--ion-color-danger-tint) !important;
+}

@@ -1,0 +1,51 @@
+.buttons {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 10px;
+
+  button {
+    width: 60px;
+    height: 60px;
+    font-size: 1.5em;
+    border: none;
+    border-radius: 5px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    cursor: pointer;
+    background-color: #f0f0f0;
+    transition: background-color 0.3s ease;
+
+    &:hover {
+      background-color: #e0e0e0;
+    }
+
+    &:active {
+      background-color: #ccc;
+    }
+
+    &.operator {
+      background-color: #ff9500;
+      color: white;
+
+      &:hover {
+        background-color: #ff8500;
+      }
+
+      &:active {
+        background-color: #e07b00;
+      }
+    }
+
+    &.clear {
+      background-color: #ff3b30;
+      color: white;
+
+      &:hover {
+        background-color: #ff2a20;
+      }
+
+      &:active {
+        background-color: #e02620;
+      }
+    }
+  }
+}

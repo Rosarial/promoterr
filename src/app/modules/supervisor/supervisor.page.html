@@ -1,0 +1,27 @@
+<app-header-custom [enableMenu]="true" [onBack]="false" [title]="'Supervisor'" />
+
+<ion-content>
+  <app-userinfo />
+  <ion-card>
+    <ion-list>
+      <ion-list-header>
+        <ion-label>Gerencie</ion-label>
+        <ion-button></ion-button>
+      </ion-list-header>
+      <ion-item button (click)="goToPromoters()">
+        <ion-icon name="people-circle" slot="start"></ion-icon>
+        <ion-label>Promotores</ion-label>
+      </ion-item>
+
+      <ion-item button (click)="goToStores()">
+        <ion-icon name="storefront" slot="start"></ion-icon>
+        <ion-label>Lojas/Clientes</ion-label>
+      </ion-item>
+
+      <ion-item button (click)="goToCheckins()">
+        <ion-icon name="checkmark-done-circle" slot="start"></ion-icon>
+        <ion-label>Check-ins</ion-label>
+      </ion-item>
+    </ion-list>
+  </ion-card>
+</ion-content>

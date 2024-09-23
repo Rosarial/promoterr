@@ -1,0 +1,21 @@
+<ion-header [translucent]="true">
+  <ion-toolbar>
+    <ion-title>promoters</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content [fullscreen]="true">
+  <ion-card *ngIf="promotersUser.length > 0">
+    <ion-list *ngFor="let promoter of promotersUser">
+      <ion-item>
+        <ion-avatar slot="start">
+          <img [src]="promoter?.profile?.photo" />
+        </ion-avatar>
+        <ion-label color="dark">
+          {{promoter?.profile?.firstName ?? ' nome não informado'}}
+        </ion-label>
+        <ion-icon color="primary" slot="end" name="cog"></ion-icon>
+      </ion-item>
+    </ion-list>
+  </ion-card>
+</ion-content>

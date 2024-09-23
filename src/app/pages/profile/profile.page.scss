@@ -1,0 +1,39 @@
+.box_photo_profile {
+  display: flex;
+  justify-content: center;
+  margin-top: 1em;
+  &__content {
+    position: relative;
+    display: flex;
+    justify-content: center;
+    &__img {
+      border: solid 5px var(--ion-color-primary);
+      position: relative;
+      width: 150px;
+      height: 150px;
+      border-radius: 50%;
+      overflow: hidden;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      ion-img {
+        height: 100%;
+        width: 100%;
+      }
+      ion-img::part(image) {
+        background-color: var(--ion-color-primary);
+        object-fit: cover;
+      }
+      &__icon {
+        position: absolute;
+        bottom: -8px;
+        margin: 0 auto;
+        font-size: 3em;
+        width: 100%;
+        background: #6666664d;
+        display: flex;
+        justify-content: center;
+      }
+    }
+  }
+}

@@ -1,0 +1,9 @@
+ion-card {
+  position: relative;
+  .btn-trash {
+    position: absolute;
+    bottom: 0;
+    right: 0.2em;
+    z-index: 10;
+  }
+}

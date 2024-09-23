@@ -1,0 +1,14 @@
+.info_user_not_complete {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  &__text {
+    font-weight: 400;
+  }
+  &__icon {
+    padding: 0 1em 0 0;
+  }
+  &__btn {
+    padding: auto;
+  }
+}

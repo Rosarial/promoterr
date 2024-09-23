@@ -1,0 +1,6 @@
+<ion-content>
+  <div class="calculator">
+    <app-display [expression]="expression" [result]="currentValue" />
+    <app-buttons-calc (buttonClick)="onButtonClick($event)" />
+  </div>
+</ion-content>

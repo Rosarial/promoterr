@@ -1,0 +1,163 @@
+<app-header-custom title="Home"> </app-header-custom>
+
+<ion-content [fullscreen]="true">
+  <ion-segment value="calendar" mode="md" color="primary" (ionChange)="segmentChanged($event)">
+    <ion-segment-button color="success" value="calendar" layout="icon-bottom">
+      <ion-label>Loja</ion-label>
+      <ion-icon name="business"></ion-icon>
+    </ion-segment-button>
+    <ion-segment-button value="calc" layout="icon-bottom">
+      <ion-label>Calc</ion-label>
+      <ion-icon name="calculator"></ion-icon>
+    </ion-segment-button>
+  </ion-segment>
+
+  <ng-container *ngIf="view !== 'calendar'">
+    <app-calc />
+  </ng-container>
+
+  <ng-container *ngIf="view === 'calendar'">
+    <div class="content ion-no-padding">
+      <app-userinfo [userInfo]="userInfo" />
+      <!-- Filtro por data ADMIM e SUPERVISOR -->
+      <ng-container *ngIf="userInfo && userInfo.role !== 'promoter'">
+        <ion-list class="dateFilter" lines="none">
+          <ion-item>
+            <div id="open-date-input">
+              <ion-button fill="clear">
+                <ion-icon slot="start" icon="calendar"></ion-icon>
+                <ion-label>Filtro por data:</ion-label>
+              </ion-button>
+            </div>
+            <ion-datetime-button
+              contenteditable="true"
+              color="tertiary"
+              slot="end"
+              datetime="datetime"
+            ></ion-datetime-button>
+            <ion-modal [keepContentsMounted]="true">
+              <ng-template>
+                <ion-datetime
+                  [showDefaultButtons]="true"
+                  locale="pt-Br"
+                  [max]="now"
+                  size="cover"
+                  id="datetime"
+                  (ionChange)="changeDate($event)"
+                  presentation="date"
+                  [value]="now"
+                  [formatOptions]="{
+                      date: {
+                        weekday: 'short',
+                        month: 'long',
+                        day: '2-digit',
+                      },
+          }"
+                ></ion-datetime>
+              </ng-template>
+            </ion-modal>
+          </ion-item>
+        </ion-list>
+      </ng-container>
+
+      <div class="filter_date"></div>
+      <div class="content_stores">
+        <div class="center" *ngIf="loading">
+          <ion-spinner name="crescent"></ion-spinner>
+        </div>
+
+        <ng-container *ngIf="!loading">
+          <ion-card
+            mode="ios"
+            button
+            *ngFor="let store of stores"
+            (click)="navagateCheckin(store, userInfo)"
+          >
+            <ng-container *ngIf="userInfo.role === 'promoter' ">
+              <ion-chip
+                color="danger"
+                mode="ios"
+                outline="true"
+                *ngIf="
+    !store.checkin?.initialCheckin && !store?.checkin?.isDone"
+              >
+                <ion-label>Checkin <strong>não inciado</strong></ion-label>
+                <ion-icon name="close-circle"></ion-icon>
+              </ion-chip>
+
+              <ion-chip
+                color="danger"
+                mode="ios"
+                outline="true"
+                *ngIf="
+        store.checkin?.initialCheckin && !store?.checkin?.isDone"
+              >
+                <ion-label>
+                  <strong>Checkout</strong> não finalizado
+                  <ion-note>
+                    <small> {{store.checkin?.initialCheckinDate | date: 'dd/MM/yyyy' }}</small>
+                  </ion-note>
+                </ion-label>
+                <ion-icon name="close-circle"></ion-icon>
+              </ion-chip>
+
+              <ion-chip
+                color="success"
+                mode="ios"
+                outline="true"
+                *ngIf="
+        store.checkin?.initialCheckin && store.checkin?.isDone"
+              >
+                <ion-label>Checkout finalizado</ion-label>
+                <ion-icon name="close-circle"></ion-icon>
+              </ion-chip>
+            </ng-container>
+
+            <ion-grid>
+              <ion-row>
+                <ion-col size="2" class="content_stores__thumbnail">
+                  <ion-thumbnail>
+                    <img class="content_stores__img" *ngIf="store && store.foto" [src]="store.id" />
+                    <ion-icon
+                      class="content_stores__icon"
+                      color="primary"
+                      *ngIf="store && !store.foto"
+                      name="business"
+                    ></ion-icon>
+                  </ion-thumbnail>
+                </ion-col>
+                <ion-col size="10">
+                  <ion-text class="ion-text-upercase content_stores__text">
+                    <div class="content_stores__text_name">
+                      <strong>{{store.cnpj}} - {{store.name}}</strong>
+                    </div>
+                    <div class="content_stores__text_date">
+                      <!-- 21/05/2024 {{store.open}} - {{store.close}} -->
+                      <span>{{store.phone}}</span>
+                    </div>
+                    <div class="content_stores__text_addres">{{store.address}}</div>
+                  </ion-text>
+                </ion-col>
+              </ion-row>
+            </ion-grid>
+            <ng-container *ngIf="userInfo?.role !== 'promoter' && store?.checkins?.length">
+              <ion-card mode="ios" color="primary" *ngFor="let checkin of store.checkins">
+                <ion-icon
+                  size="small"
+                  *ngIf="checkin?.isDone"
+                  color="success"
+                  name="checkmark-done-circle-sharp"
+                ></ion-icon>
+                <ion-note color="light">
+                  Promotor:
+                  <strong>{{ checkin.user?.profile?.firstName ?? checkin.user?.id}}</strong> <br />
+                  <small> Finalizado em: {{ checkin?.updatedAt| date: 'dd/MM/yyyy' }} </small>
+                </ion-note>
+              </ion-card>
+            </ng-container>
+          </ion-card>
+        </ng-container>
+      </div>
+    </div>
+  </ng-container>
+</ion-content>
