@@ -6,7 +6,7 @@ export const environment = {
   // https://galaxyteste.online/apis/apis/clientes/
   // https://dashboard.render.com/web/srv-cpl4rgi0si5c738fu1qg/logs
   // baseUrl: 'https://apirosarial.rmscorretorachat.com.br',
-  baseUrl: 'https://apirosarial.onrender.com',
+  baseUrl: 'http://104.131.27.204:8000',
   apis: '/api',
   production: false,
   distancePermited: 500, // 1km 1000m
