@@ -28,7 +28,7 @@ export class UploadServiceService {
     // Use your own API!
     const url = 'http://localhost:8888/images/upload.php';
 
-    this.https
+    this.http
       .post(url, formData)
       .pipe(
         finalize(() => {
