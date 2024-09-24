@@ -26,9 +26,9 @@ export class UploadServiceService {
     // await loading.present();
 
     // Use your own API!
-    const url = 'http://localhost:8888/images/upload.php';
+    const url = 'https://localhost:8888/images/upload.php';
 
-    this.http
+    this.https
       .post(url, formData)
       .pipe(
         finalize(() => {
