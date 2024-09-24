@@ -1,6 +1,6 @@
 export const environment = {
   // baseUrl: 'https://galaxyteste.online/apis',
-  baseUrl: 'http://rosarialapp.online',
+  baseUrl: 'https://rosarialapp.online',
   apis: '/api',
   production: true,
   distancePermited: 10000, // 1km 1000m
