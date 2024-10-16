@@ -9,8 +9,8 @@ export const environment = {
   baseUrl: 'https://rosarialapp.online',
   apis: '/api',
   production: false,
-  distancePermited: 500, // 1km 1000m
-  distanceStoresPermitted: 20000, // 10km 1000mnpm audit
+  distancePermited: 5000, // 1km 1000m
+  distanceStoresPermitted: 2000000, // 10km 1000mnpm audit
 
   appInfo: {
     name: 'Prom. Rosarial',
